@@ -23,11 +23,11 @@ func ValidateStruct(user models.User) []*ErrorResponse {
 	var errors []*ErrorResponse
 	err := validate.Struct(user)
 	if err != nil {
-		for _, error := range err.(validator.ValidationErrors) {
+		for _, err := range err.(validator.ValidationErrors) {
 			var element ErrorResponse
-			element.FailedField = error.StructNamespace()
-			element.Tag = error.Tag()
-			element.Value = error.Param()
+			element.FailedField = err.StructNamespace()
+			element.Tag = err.Tag()
+			element.Value = err.Param()
 			errors = append(errors, &element)
 		}
 	}
@@ -66,14 +66,19 @@ func (r *Repository) CreateUser(context *fiber.Ctx) error {
 
 	errors := ValidateStruct(user)
 	if errors != nil {
-		return context.Status(fiber.StatusBadRequest).JSON(errors)
+		return context.Status(http.StatusBadRequest).JSON(errors)
 	}
 
 	if err := r.DB.Create(&user).Error; err != nil {
-		return context.Status(http.StatusBadRequest).JSON(fiber.Map{"status": "erro", "message": "Não foi possível criar o usuário", "data": err})
+		return context.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  "erro",
+			"message": "Não foi possível criar o usuário",
+			"data":    err})
 	}
 
-	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "Usuário foi adicionado", "data": user})
+	context.Status(http.StatusOK).JSON(&fiber.Map{
+		"message": "Usuário foi adicionado",
+		"data":    user})
 	return nil
 
 }
@@ -106,7 +111,7 @@ func (r *Repository) UpdateUser(context *fiber.Ctx) error {
 
 	if db.Model(&user).Where("id = ?", id).Updates(&user).RowsAffected == 0 {
 		context.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"message": "Não foi possível recuperar o perfil do usuário",
+			"message": "Não foi possível atualizar o perfil do usuário",
 		})
 		return nil
 	}
@@ -152,12 +157,12 @@ func (r *Repository) GetUserById(context *fiber.Ctx) error {
 
 	if id == "" {
 		context.Status(http.StatusBadRequest).JSON(&fiber.Map{
-			"message": "Você deve passar o ID para deletar um usuário",
+			"message": "Você deve passar o ID para buscar um usuário",
 		})
 		return nil
 	}
 
-	err := r.DB.Where("id = ?", id).First(userModel).Error
+	err := r.DB.Where("id = ?", id).First(&userModel).Error
 
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(&fiber.Map{
