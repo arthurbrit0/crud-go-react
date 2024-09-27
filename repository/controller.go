@@ -125,30 +125,31 @@ func (r *Repository) UpdateUser(context *fiber.Ctx) error {
 }
 
 func (r *Repository) DeleteUser(context *fiber.Ctx) error {
-	userModel := migrations.Users{}
+
 	id := context.Params("id")
 
 	if id == "" {
-		context.Status(http.StatusBadRequest).JSON(&fiber.Map{
+		return context.Status(http.StatusBadRequest).JSON(&fiber.Map{
 			"message": "Você deve passar o ID para deletar um usuário",
 		})
-		return nil
 	}
 
-	err := r.DB.Delete(userModel, id)
+	var userModel migrations.Users
+	if err := r.DB.First(&userModel, id).Error; err != nil {
+		return context.Status(http.StatusNotFound).JSON(&fiber.Map{
+			"message": "Usuário não encontrado",
+		})
+	}
 
-	if err.Error != nil {
-		context.Status(http.StatusBadRequest).JSON(&fiber.Map{
+	if err := r.DB.Delete(&userModel).Error; err != nil {
+		return context.Status(http.StatusBadRequest).JSON(&fiber.Map{
 			"message": "Não foi possível deletar o usuário",
 		})
-		return err.Error
 	}
 
-	context.Status(http.StatusOK).JSON(&fiber.Map{
+	return context.Status(http.StatusOK).JSON(&fiber.Map{
 		"message": "Usuário deletado com sucesso!",
 	})
-	return nil
-
 }
 
 func (r *Repository) GetUserById(context *fiber.Ctx) error {
@@ -174,6 +175,7 @@ func (r *Repository) GetUserById(context *fiber.Ctx) error {
 	context.Status(http.StatusOK).JSON(&fiber.Map{
 		"status":  "success",
 		"message": "Usuário encontrado com sucesso!",
+		"data":    userModel,
 	})
 	return nil
 }
