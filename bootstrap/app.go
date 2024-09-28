@@ -58,7 +58,7 @@ func InitializeApp(app *fiber.App) {
 
 	app.Use(cors.New(cors.Config{
 		AllowCredentials: true,
-		AllowOrigins:     "http://localhost:3000",
+		AllowOrigins:     "http://localhost:5173",
 	}))
 	repo.SetupRoutes(app)
 	app.Listen(":8081")
