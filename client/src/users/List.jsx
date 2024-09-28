@@ -73,6 +73,8 @@ export default function List() {
                                 <Link className={`border px-3 py-1 mr-3 rounded hover:scale-105 duration-300 ${myPage == key ? 'hover:scale-105 bg-purple-600 text-purple-100' : ''}`} to={`?page=${key}`} key={key}>{key + 1}</Link>)}
                     </div>
 
+                    {/* Modal */}
+
                     <div className="relative z-10 hidden" aria-labelledby='modal-title' role="dialog" aria-modal="true" id="new-modal">
                         <div className="fixed inset-0 bg-black bg-opacity-70 transition-opacity"></div>
                         <div className="fixed z-10 inset-0 overflow-y-auto">
@@ -96,7 +98,7 @@ export default function List() {
                                                     </div>
                                                     <div className="mb-5">
                                                         <label className="block text-gray-700 text-sm font-bold mb-2">Data</label>
-                                                        <input type="text" name="data" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required/>
+                                                        <input type="date" name="data" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required/>
                                                     </div>
                                                     <div className="mb-5">
                                                         <label className="block text-gray-700 text-sm font-bold mb-2">Cidade</label>
@@ -116,6 +118,8 @@ export default function List() {
                             </div>
                         </div>
                     </div>
+
+                {/* Modal */}
 
                 </div>
             </div>
