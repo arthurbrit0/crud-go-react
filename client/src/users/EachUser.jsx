@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom'
 import moment from 'moment'
 import axios from 'axios'
 import {API_URL} from '../config'
+import Swal from 'sweetalert2'; 
 
 export default function EachUser({user, fetchData}) {
 
@@ -37,15 +38,35 @@ export default function EachUser({user, fetchData}) {
     }
 
     const deleteUser = () => {
-
-        if(window.confirm("Você tem certeza de que deseja apagar o usuário?") == true) {
-            axios.delete(`${API_URL}/users/${user.ID}`)
-            .then(res => fetchData())
-            .catch(error => console.log(error.response))
-        } else {
-            console.log("Você cancelou a deleção do usuário.")
-        }
-    }
+        Swal.fire({
+            title: 'Você tem certeza de que deseja apagar o usuário?',
+            text: "Essa ação não pode ser revertida!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, apagar!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`${API_URL}/users/${user.ID}`)
+                    .then(res => {
+                        fetchData();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Usuário deletado com sucesso!',
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    })
+                    .catch(error => console.log(error.response));
+            } else {
+                console.log("Você cancelou a deleção do usuário.");
+            }
+        });
+    };
 
     return (
         <div className="bg-slate-100 rounded-lg mb-4 p-4 border-2 border-transparent hover:border-2 hover:border-purple-700">
