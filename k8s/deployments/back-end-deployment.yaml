@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: back-end-deployment
+  labels:
+    app: crud-go-react
+    tier: backend
+  namespace: crud-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: crud-go-react
+      tier: backend
+    namespace: crud-app
+  template:
+    metadata:
+      labels:
+        app: crud-go-react
+        tier: backend
+      namespace: crud-app
+    spec:
+      containers:
+      - name: back-end
+        image: arthurbrit0/crud-go-react_backend:latest
+        ports:  
+        - containerPort: 8080
+        env:
+        - name: DB_HOST
+          value: "postgres-service"  
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_PASSWORD
+          value: "teste"
+        - name: DB_USER
+          value: "go_crud"
+        - name: DB_SSLMODE
+          value: "disable"
+        - name: DB_NAME
+          value: "postgres"

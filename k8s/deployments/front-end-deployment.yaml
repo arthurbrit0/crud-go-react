@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-end-deployment
+  labels:
+    app: crud-go-react
+    tier: frontend
+  namespace: crud-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: crud-go-react
+      tier: frontend
+    namespace: crud-app
+  template:
+    metadata:
+      labels:
+        app: crud-go-react
+        tier: frontend
+      namespace: crud-app
+    spec:
+      containers:
+      - name: front-end
+        image: arthurbrit0/crud-go-react_frontend:latest
+        ports:
+        - containerPort: 80

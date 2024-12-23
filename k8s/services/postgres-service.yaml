@@ -1,0 +1,16 @@
+apiVerison: v1
+kind: Service
+metadata:
+  name: postgres-service
+  labels:
+    app: crud-go-react
+    tier: db
+  namespace: crud-app
+spec:
+  selector:
+    app: crud-go-react
+    tier: db
+  namespace: crud-app
+  ports:
+  - port: 5432
+    targetPort: 5432
