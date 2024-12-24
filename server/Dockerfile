@@ -30,6 +30,6 @@ COPY --from=builder /app/scripts/wait-for-it.sh /usr/local/bin/wait-for-it.sh
 
 RUN chmod +x server /usr/local/bin/wait-for-it.sh
 
-EXPOSE 8081
+EXPOSE 8080
 
 CMD ["wait-for-it.sh", "db:5432", "--", "./server"]
