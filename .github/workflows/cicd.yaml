@@ -32,6 +32,7 @@ jobs:
             echo "folder=back-end" >> $GITHUB_OUTPUT
           else
             echo "folder=none" >> $GITHUB_OUTPUT
+          fi
 
       # ----------- FRONT-END -----------
       - name: Build & push front-end image
