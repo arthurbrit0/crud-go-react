@@ -33,3 +33,5 @@ RUN chmod +x server /usr/local/bin/wait-for-it.sh
 EXPOSE 8080
 
 CMD ["wait-for-it.sh", "db:5432", "--", "./server"]
+
+
