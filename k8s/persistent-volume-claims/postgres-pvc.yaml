@@ -2,9 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgres-pvc
-  labels:
-    app: crud-go-react
-    tier: db
+  namespace: crud-app
 spec:
   accessModes:
     - ReadWriteOnce

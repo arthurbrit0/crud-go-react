@@ -12,13 +12,11 @@ spec:
     matchLabels:
       app: crud-go-react
       tier: backend
-    namespace: crud-app
   template:
     metadata:
       labels:
         app: crud-go-react
         tier: backend
-      namespace: crud-app
     spec:
       containers:
       - name: back-end

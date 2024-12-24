@@ -49,10 +49,19 @@ export default function List() {
         e.preventDefault()
         var form = document.getElementById('newform')
         var formData = new FormData(form)
-        axios.post(`${API_URL}/users`, formData)
+        var object = {};
+        formData.forEach((value, key) => object[key] = value);
+        var json = JSON.stringify(object);
+    
+        axios.post(`${API_URL}/users`, json, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
         .then(res => completeForm(form))
         .catch(error => console.log(error.response))
     }
+    
 
     let myPage = searchParams.get("page") ? searchParams.get("page") : 0
 
