@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-end-deployment
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: crud-go-react
+    tier: frontend
+spec:
+  replicas: {{ .Values.frontend.replicas }}
+  selector:
+    matchLabels:
+      app: crud-go-react
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: crud-go-react
+        tier: frontend
+    spec:
+      containers:
+      - name: front-end
+        image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+        ports:
+          - containerPort: {{ .Values.frontend.service.port }}

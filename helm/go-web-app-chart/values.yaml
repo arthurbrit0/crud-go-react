@@ -1,0 +1,50 @@
+namespace: crud-app
+
+backend:
+  image:
+    repository: arthurbrit0/crud-go-react_backend
+    tag: latest
+  replicas: 2
+  service:
+    port: 8080
+    type: LoadBalancer
+  env:
+    DB_HOST: "postgres-service"
+    DB_PORT: "5432"
+    DB_PASSWORD: "teste"
+    DB_USER: "go_crud"
+    DB_SSLMODE: "disable"
+    DB_NAME: "postgres"
+
+frontend:
+  image:
+    repository: arthurbrit0/crud-go-react_frontend
+    tag: latest
+  replicas: 2
+  service:
+    port: 80
+    type: LoadBalancer
+
+postgres:
+  image:
+    repository: postgres
+    tag: "13"
+  replicas: 1
+  service:
+    port: 5432
+  pvc:
+    storage: 5Gi
+  db:
+    name: "postgres"
+    user: "go_crud"
+    password: "teste"
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hostname: crudapp.example.com
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, PUT, POST, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Origin, Content-Type, Accept, Authorization"

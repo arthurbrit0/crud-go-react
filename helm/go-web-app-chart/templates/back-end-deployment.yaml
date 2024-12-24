@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: back-end-deployment
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: crud-go-react
+    tier: backend
+spec:
+  replicas: {{ .Values.backend.replicas }}
+  selector:
+    matchLabels:
+      app: crud-go-react
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: crud-go-react
+        tier: backend
+    spec:
+      containers:
+      - name: back-end
+        image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+        ports:
+          - containerPort: {{ .Values.backend.service.port }}
+        env:
+          - name: DB_HOST
+            value: "{{ .Values.backend.env.DB_HOST }}"
+          - name: DB_PORT
+            value: "{{ .Values.backend.env.DB_PORT }}"
+          - name: DB_PASSWORD
+            value: "{{ .Values.backend.env.DB_PASSWORD }}"
+          - name: DB_USER
+            value: "{{ .Values.backend.env.DB_USER }}"
+          - name: DB_SSLMODE
+            value: "{{ .Values.backend.env.DB_SSLMODE }}"
+          - name: DB_NAME
+            value: "{{ .Values.backend.env.DB_NAME }}"
